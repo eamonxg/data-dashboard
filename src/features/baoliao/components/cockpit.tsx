@@ -1,6 +1,7 @@
 'use client';
 
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { KpiCards } from '@/features/baoliao/components/kpi-cards';
 
 function PlaceholderCard({
   title,
@@ -27,12 +28,7 @@ export function Cockpit() {
   return (
     <div className='grid gap-4'>
       {/* KPI 行 */}
-      <div className='grid gap-4 md:grid-cols-2 xl:grid-cols-4'>
-        <PlaceholderCard title='今日线索' height='h-24' />
-        <PlaceholderCard title='本周线索' height='h-24' />
-        <PlaceholderCard title='平均响应时长' height='h-24' />
-        <PlaceholderCard title='采用转化率' height='h-24' />
-      </div>
+      <KpiCards />
 
       {/* 概览行：渠道分布(环形) + 分类采用情况(条形) */}
       <div className='grid gap-4 xl:grid-cols-5'>
