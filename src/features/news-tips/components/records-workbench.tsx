@@ -3,11 +3,12 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
-import { dashboardQueryOptions, recordsQueryOptions } from '@/features/news-tips/api/queries';
+import { dashboardQueryOptions } from '@/features/news-tips/api/queries';
 import { ActiveFilters } from '@/features/news-tips/components/active-filters';
 import { RecordsTable } from '@/features/news-tips/components/records-table';
 import { WorkbenchNav } from '@/features/news-tips/components/section-nav';
 import { useNewsTipFilterState } from '@/features/news-tips/hooks/use-news-tip-filter-state';
+import { useRecordsWithOverrides } from '@/features/news-tips/hooks/use-records-with-overrides';
 
 export function RecordsWorkbench() {
   const {
@@ -21,7 +22,7 @@ export function RecordsWorkbench() {
     changeSort
   } = useNewsTipFilterState();
   const { data: dashboard } = useSuspenseQuery(dashboardQueryOptions(queryFilters));
-  const { data: recordsResponse } = useSuspenseQuery(recordsQueryOptions(queryFilters));
+  const records = useRecordsWithOverrides(queryFilters);
 
   const showTodayTodo = () => {
     void setParams({
@@ -49,15 +50,15 @@ export function RecordsWorkbench() {
       </div>
       <ActiveFilters
         filters={filterState}
-        resultCount={recordsResponse.items.length}
-        totalCount={recordsResponse.rangeTotalItems}
+        resultCount={records.items.length}
+        totalCount={records.rangeTotalItems}
         updatedAt={dashboard.updatedAt}
         onRemove={removeFilter}
         onClear={clearFilters}
       />
       <RecordsTable
-        records={recordsResponse.items}
-        totalCount={recordsResponse.rangeTotalItems}
+        records={records.items}
+        totalCount={records.rangeTotalItems}
         filters={filterState}
         sortMode={sortMode}
         onToggleFilter={toggleFilter}

@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
-import { useInfobar, type InfobarContent } from '@/components/ui/infobar';
+import { useOptionalInfobar, type InfobarContent } from '@/components/ui/infobar';
 import { cn } from '@/lib/utils';
 
 interface InfoButtonProps extends Omit<React.ComponentProps<typeof Button>, 'content'> {
@@ -19,19 +19,22 @@ export function InfoButton({
   size = 'icon',
   ...props
 }: InfoButtonProps) {
-  const { setContent, setOpen } = useInfobar();
+  const infobar = useOptionalInfobar();
 
   // Set content on mount so the infobar has it ready, but don't force it open
   const contentRef = React.useRef(content);
   contentRef.current = content;
 
   React.useEffect(() => {
-    setContent(contentRef.current);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    if (!infobar) return;
+    infobar.setContent(contentRef.current);
+  }, [infobar]);
+
+  if (!infobar) return null;
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setContent(content);
-    setOpen(true);
+    infobar.setContent(content);
+    infobar.setOpen(true);
     props.onClick?.(e);
   };
 

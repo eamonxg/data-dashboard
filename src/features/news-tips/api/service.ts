@@ -2,12 +2,13 @@ import {
   NEWS_TIP_CATEGORIES,
   NEWS_TIP_CHANNELS,
   NEWS_TIP_DISTRICTS,
+  NEWS_TIP_ASSIGNEES as ASSIGNEES,
   NEWS_TIP_SOURCE_PLATFORMS,
   NEWS_TIP_STATUSES,
-  PRIORITY_LABELS,
   SHENZHEN_LOCATIONS,
   SHENZHEN_STREETS
 } from '../constants/options';
+import { derivePriority } from '../lib/priority';
 import type {
   CategoryBar,
   ChannelSlice,
@@ -24,7 +25,6 @@ import type {
   NewsTipRecordWithPriority,
   NewsTipSourcePlatform,
   NewsTipStatus,
-  PriorityLevel,
   SourcePlatformSlice,
   StatusStat,
   TimelineEntry,
@@ -34,21 +34,6 @@ import type {
 const SEED = 20260704;
 const TOTAL_DAYS = 180;
 const DAY_MS = 24 * 60 * 60 * 1000;
-
-const ASSIGNEES = [
-  '陈晓敏',
-  '林嘉豪',
-  '黄志强',
-  '李文静',
-  '张伟明',
-  '王雨桐',
-  '刘家乐',
-  '吴思远',
-  '赵梓涵',
-  '周敏仪',
-  '郑亦然',
-  '郭子航'
-];
 
 const REPORTER_SURNAMES = ['陈', '李', '黄', '张', '林', '王', '刘', '吴', '赵', '周', '梁', '何'];
 const REPORTER_SUFFIXES = ['先生', '女士', '**', '师傅', '阿姨'];
@@ -254,8 +239,6 @@ const CATEGORY_TEMPLATES: Record<NewsTipCategory, CategoryTemplate[]> = {
 };
 
 const HOUR_WEIGHTS = [1, 1, 1, 1, 1, 2, 3, 5, 8, 9, 9, 8, 6, 6, 8, 9, 9, 9, 8, 7, 5, 4, 3, 2];
-const EMERGENCY_RISK_TAGS = new Set(['公共安全', '消防风险', '交通事故', '暴雨积水', '食品安全']);
-
 interface MockClock {
   now: Date;
   todayStart: Date;
@@ -673,50 +656,6 @@ function filterByRange(
     const createdMs = new Date(record.createdAt).getTime();
     return createdMs >= startMs && createdMs <= endMs;
   });
-}
-
-function minutesSince(iso: string, now: Date): number {
-  return Math.max(0, Math.round((now.getTime() - new Date(iso).getTime()) / (60 * 1000)));
-}
-
-function derivePriority(record: NewsTipRecord, now: Date): NewsTipRecordWithPriority {
-  const ageMinutes = minutesSince(record.createdAt, now);
-  const hasEmergencyRisk = record.riskTags.some((tag) => EMERGENCY_RISK_TAGS.has(tag));
-  let priorityLevel: PriorityLevel = 'low';
-  let priorityReason = '未命中超时、突发或高触达渠道规则';
-
-  if (
-    (record.category === '突发事件' || hasEmergencyRisk) &&
-    record.status !== '已采用' &&
-    record.status !== '不予采用'
-  ) {
-    priorityLevel = 'high';
-    priorityReason = '突发或公共安全线索尚未完成处置，需要优先核实';
-  } else if (record.status === '待审核' && ageMinutes > 60) {
-    priorityLevel = 'high';
-    priorityReason = `待审核 ${ageMinutes} 分钟，超过 60 分钟分诊线`;
-  } else if (record.responseMinutes !== null && record.responseMinutes > 240) {
-    priorityLevel = 'high';
-    priorityReason = `响应时长 ${record.responseMinutes} 分钟，超过 240 分钟预警线`;
-  } else if (record.status === '跟进中' && ageMinutes > 180) {
-    priorityLevel = 'medium';
-    priorityReason = `跟进中 ${ageMinutes} 分钟，建议持续关注进展`;
-  } else if (
-    record.category === '民生投诉' &&
-    ['新闻热线电话', '微信公众号', '报料小程序'].includes(record.channel)
-  ) {
-    priorityLevel = 'medium';
-    priorityReason = '民生投诉来自高触达渠道，建议排入例行跟进';
-  }
-
-  return {
-    ...record,
-    priorityLevel,
-    priorityLabel: PRIORITY_LABELS[priorityLevel],
-    priorityReason,
-    priorityScore: priorityLevel === 'high' ? 3 : priorityLevel === 'medium' ? 2 : 1,
-    ageMinutes
-  };
 }
 
 function enrichRecords(records: NewsTipRecord[], now: Date): NewsTipRecordWithPriority[] {

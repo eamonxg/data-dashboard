@@ -55,13 +55,13 @@ export default function PageContainer({
   return (
     <div className='flex flex-1 flex-col px-4 pt-2 pb-4 md:px-6 md:pt-4'>
       {hasHeader && (
-        <div className='mb-4 flex items-start justify-between gap-4'>
+        <div className='mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4'>
           <Heading
             title={pageTitle ?? ''}
             description={pageDescription ?? ''}
             infoContent={infoContent}
           />
-          {pageHeaderAction && <div className='shrink-0'>{pageHeaderAction}</div>}
+          {pageHeaderAction && <div className='sm:shrink-0'>{pageHeaderAction}</div>}
         </div>
       )}
       {content}

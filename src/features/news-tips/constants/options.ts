@@ -145,3 +145,18 @@ export const GRANULARITY_OPTIONS: { value: Granularity; label: string }[] = [
   { value: 'week', label: '按周' },
   { value: 'month', label: '按月' }
 ];
+
+export const NEWS_TIP_ASSIGNEES: string[] = [
+  '陈晓敏',
+  '林嘉豪',
+  '黄志强',
+  '李文静',
+  '张伟明',
+  '王雨桐',
+  '刘家乐',
+  '吴思远',
+  '赵梓涵',
+  '周敏仪',
+  '郑亦然',
+  '郭子航'
+];

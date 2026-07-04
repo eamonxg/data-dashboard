@@ -191,3 +191,26 @@ export interface DashboardData {
   highPriorityCount: number;
   updatedAt: string;
 }
+
+export interface NewsTipOverride {
+  id: string;
+  status?: NewsTipStatus;
+  assignee?: string;
+  /** 被拒前的来源状态,供撤回不予采用时回退 */
+  rejectedFrom?: NewsTipStatus;
+  timelineAppends: TimelineEntry[];
+  updatedAt: string;
+}
+
+export type OverridesMap = Record<string, NewsTipOverride>;
+
+export type FlowOperationKind = 'move' | 'reassign' | 'note' | 'revert';
+
+export interface FlowOperation {
+  id: string;
+  recordId: string;
+  kind: FlowOperationKind;
+  /** 操作前该条的 override 快照(不存在则为 null),撤销时整体回滚 */
+  prevOverride: NewsTipOverride | null;
+  label: string;
+}

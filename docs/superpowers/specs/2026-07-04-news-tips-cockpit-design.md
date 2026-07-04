@@ -106,7 +106,7 @@ src/features/news-tips/
 - 页面应可通过 Next.js `output: 'export'` 打成纯静态文件；静态构建时关闭 Sentry tunnel/rewrite，并启用 `images.unoptimized`。
 - 与驾驶舱无关的模板示例 API Route 如果阻碍 static export，应在最终清理阶段移除或禁用。
 
-## 5. 交互清单（8 项）
+## 5. 交互清单（8 项 + 处理流转操作）
 
 1. 全局时间范围切换（联动 KPI/图表/表格）
 2. 趋势图粒度切换（日/周/月）
@@ -116,6 +116,16 @@ src/features/news-tips/
 6. 行点击展开线索详情与处理轨迹
 7. CSV 导出当前筛选结果（Blob 真实下载）
 8. 刷新（loading 反馈）+ 明暗主题切换
+
+**9. 处理流转看板操作（从只读升级为可操作）** — 详见
+`docs/superpowers/specs/2026-07-04-flow-board-interaction-design.md`：
+
+- 拖拽卡片在列间流转状态，按流水线约束（待审核 → 跟进中 → 已采用/不予采用），非法落点禁止
+- 落到「不予采用」弹理由框（必填）
+- 卡片 ⋯ 菜单：转派处理人 / 追加处理备注 / 查看详情（时间线）/ 撤回（终态）
+- 每次操作 Toast + 撤销（Undo），卡片乐观更新
+- 操作以 localStorage 覆盖层持久化（刷新保留），看板与线索明细表数据一致（KPI/图表暂保持基础值）
+- 仍为纯前端：不引入 Server Action / route handler / 后端接口，`output: 'export'` 静态导出成立
 
 ## 6. 模板改造
 

@@ -65,6 +65,10 @@ function useInfobar() {
   return context;
 }
 
+function useOptionalInfobar() {
+  return React.useContext(InfobarContext);
+}
+
 function InfobarProvider({
   defaultOpen = true,
   open: openProp,
@@ -757,5 +761,6 @@ export {
   InfobarRail,
   InfobarSeparator,
   InfobarTrigger,
-  useInfobar
+  useInfobar,
+  useOptionalInfobar
 };
