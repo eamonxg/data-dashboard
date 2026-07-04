@@ -7,23 +7,18 @@ import { Icons } from '@/components/icons';
 
 const sections = [
   {
-    title: '总览',
-    href: '/dashboard/news-tips',
-    icon: Icons.dashboard
-  },
-  {
-    title: '数据仪表盘',
-    href: '/dashboard/news-tips/analytics',
-    icon: Icons.trendingUp
-  },
-  {
-    title: '线索明细台',
+    title: '线索明细',
     href: '/dashboard/news-tips/records',
     icon: Icons.post
+  },
+  {
+    title: '处理流转',
+    href: '/dashboard/news-tips/flow',
+    icon: Icons.kanban
   }
 ];
 
-export function NewsTipsSectionNav() {
+export function WorkbenchNav() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const query = searchParams.toString();
@@ -31,7 +26,7 @@ export function NewsTipsSectionNav() {
 
   return (
     <Tabs value={activeSection.href} className='w-full'>
-      <TabsList className='grid h-auto w-full grid-cols-3 p-1 md:w-fit'>
+      <TabsList className='grid h-auto w-full grid-cols-2 p-1 md:w-fit'>
         {sections.map((section) => {
           const Icon = section.icon;
           const href = query ? `${section.href}?${query}` : section.href;

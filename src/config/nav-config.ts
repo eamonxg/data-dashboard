@@ -43,18 +43,21 @@ export const navGroups: NavGroup[] = [
         icon: 'dashboard',
         isActive: true,
         shortcut: ['d', 'd'],
+        items: []
+      },
+      {
+        title: '工作台',
+        url: '/dashboard/news-tips/records',
+        icon: 'kanban',
+        isActive: false,
         items: [
           {
-            title: '总览',
-            url: '/dashboard/news-tips'
-          },
-          {
-            title: '数据仪表盘',
-            url: '/dashboard/news-tips/analytics'
-          },
-          {
-            title: '线索明细台',
+            title: '线索明细',
             url: '/dashboard/news-tips/records'
+          },
+          {
+            title: '处理流转',
+            url: '/dashboard/news-tips/flow'
           }
         ]
       },
