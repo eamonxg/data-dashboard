@@ -10,7 +10,7 @@ import { ActiveFilters } from '@/features/news-tips/components/active-filters';
 import { CategoryBar } from '@/features/news-tips/components/category-bar';
 import { ChannelPie } from '@/features/news-tips/components/channel-pie';
 import { DistrictHeatGrid } from '@/features/news-tips/components/district-heat-grid';
-import { NewsTipsSectionNav } from '@/features/news-tips/components/section-nav';
+import { WorkbenchNav } from '@/features/news-tips/components/section-nav';
 import { TrendChart } from '@/features/news-tips/components/trend-chart';
 import { useNewsTipFilterState } from '@/features/news-tips/hooks/use-news-tip-filter-state';
 
@@ -23,7 +23,7 @@ export function AnalyticsDashboard() {
 
   return (
     <div className='grid gap-4'>
-      <NewsTipsSectionNav />
+      <WorkbenchNav />
       <ActiveFilters
         filters={filterState}
         resultCount={records.length}

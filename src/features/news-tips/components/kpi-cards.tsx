@@ -13,6 +13,7 @@ import {
 import { Icons } from '@/components/icons';
 import { cn } from '@/lib/utils';
 import { dashboardQueryOptions } from '@/features/news-tips/api/queries';
+import type { NewsTipFilters } from '@/features/news-tips/api/types';
 import { useNewsTipParams } from '@/features/news-tips/hooks/use-news-tip-params';
 
 // ------------------------------------------------------------
@@ -167,9 +168,10 @@ function KpiCard({
   );
 }
 
-export function KpiCards() {
-  const { filters } = useNewsTipParams();
-  const { data } = useSuspenseQuery(dashboardQueryOptions(filters));
+export function KpiCards({ filters }: { filters?: NewsTipFilters }) {
+  const { filters: paramsFilters } = useNewsTipParams();
+  const queryFilters = filters ?? paramsFilters;
+  const { data } = useSuspenseQuery(dashboardQueryOptions(queryFilters));
   const { kpi } = data;
 
   return (

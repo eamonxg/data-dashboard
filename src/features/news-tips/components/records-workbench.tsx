@@ -4,7 +4,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { dashboardQueryOptions, recordsQueryOptions } from '@/features/news-tips/api/queries';
 import { ActiveFilters } from '@/features/news-tips/components/active-filters';
 import { RecordsTable } from '@/features/news-tips/components/records-table';
-import { NewsTipsSectionNav } from '@/features/news-tips/components/section-nav';
+import { WorkbenchNav } from '@/features/news-tips/components/section-nav';
 import { useNewsTipFilterState } from '@/features/news-tips/hooks/use-news-tip-filter-state';
 
 export function RecordsWorkbench() {
@@ -22,7 +22,7 @@ export function RecordsWorkbench() {
 
   return (
     <div className='grid gap-4'>
-      <NewsTipsSectionNav />
+      <WorkbenchNav />
       <ActiveFilters
         filters={filterState}
         resultCount={recordsResponse.items.length}
