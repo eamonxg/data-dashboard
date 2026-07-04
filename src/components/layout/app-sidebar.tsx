@@ -41,16 +41,18 @@ export default function AppSidebar() {
             <SidebarMenu>
               {group.items.map((item) => {
                 const Icon = item.icon ? Icons[item.icon] : Icons.logo;
+                const hasActiveChild = item.items?.some((subItem) => pathname === subItem.url);
+                const isActive = pathname === item.url || hasActiveChild;
                 return item?.items && item?.items?.length > 0 ? (
                   <Collapsible
                     key={item.title}
                     asChild
-                    defaultOpen={item.isActive}
+                    defaultOpen={item.isActive || hasActiveChild}
                     className='group/collapsible'
                   >
                     <SidebarMenuItem>
                       <CollapsibleTrigger asChild>
-                        <SidebarMenuButton tooltip={item.title} isActive={pathname === item.url}>
+                        <SidebarMenuButton tooltip={item.title} isActive={isActive}>
                           {item.icon && <Icon />}
                           <span>{item.title}</span>
                           <Icons.chevronRight className='ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90' />

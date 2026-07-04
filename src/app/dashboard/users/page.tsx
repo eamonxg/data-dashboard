@@ -4,6 +4,7 @@ import { searchParamsCache } from '@/lib/searchparams';
 import type { SearchParams } from 'nuqs/server';
 import { usersInfoContent } from '@/features/users/info-content';
 import { UserFormSheetTrigger } from '@/features/users/components/user-form-sheet';
+import { Suspense } from 'react';
 
 export const metadata = {
   title: 'Dashboard: Users'
@@ -14,7 +15,8 @@ type PageProps = {
 };
 
 export default async function UsersPage(props: PageProps) {
-  const searchParams = await props.searchParams;
+  const isStaticExport = process.env.NEXT_STATIC_EXPORT === 'true';
+  const searchParams = isStaticExport ? {} : await props.searchParams;
   searchParamsCache.parse(searchParams);
 
   return (
@@ -24,7 +26,9 @@ export default async function UsersPage(props: PageProps) {
       infoContent={usersInfoContent}
       pageHeaderAction={<UserFormSheetTrigger />}
     >
-      <UserListingPage />
+      <Suspense fallback={null}>
+        <UserListingPage />
+      </Suspense>
     </PageContainer>
   );
 }

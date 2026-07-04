@@ -38,12 +38,25 @@ export const navGroups: NavGroup[] = [
     label: '',
     items: [
       {
-        title: '驾驶舱',
+        title: '报料驾驶舱',
         url: '/dashboard/news-tips',
         icon: 'dashboard',
-        isActive: false,
+        isActive: true,
         shortcut: ['d', 'd'],
-        items: []
+        items: [
+          {
+            title: '总览',
+            url: '/dashboard/news-tips'
+          },
+          {
+            title: '数据仪表盘',
+            url: '/dashboard/news-tips/analytics'
+          },
+          {
+            title: '线索明细台',
+            url: '/dashboard/news-tips/records'
+          }
+        ]
       },
       {
         title: '设计规范',

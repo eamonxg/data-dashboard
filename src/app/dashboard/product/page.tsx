@@ -7,6 +7,7 @@ import { Icons } from '@/components/icons';
 import Link from 'next/link';
 import { SearchParams } from 'nuqs/server';
 import { productInfoContent } from '@/config/infoconfig';
+import { Suspense } from 'react';
 
 export const metadata = {
   title: 'Dashboard: Products'
@@ -17,7 +18,8 @@ type pageProps = {
 };
 
 export default async function Page(props: pageProps) {
-  const searchParams = await props.searchParams;
+  const isStaticExport = process.env.NEXT_STATIC_EXPORT === 'true';
+  const searchParams = isStaticExport ? {} : await props.searchParams;
   searchParamsCache.parse(searchParams);
 
   return (
@@ -31,7 +33,9 @@ export default async function Page(props: pageProps) {
         </Link>
       }
     >
-      <ProductListingPage />
+      <Suspense fallback={null}>
+        <ProductListingPage />
+      </Suspense>
     </PageContainer>
   );
 }

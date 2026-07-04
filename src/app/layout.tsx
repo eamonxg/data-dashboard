@@ -25,8 +25,9 @@ export const viewport: Viewport = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const cookieStore = await cookies();
-  const activeThemeValue = cookieStore.get('active_theme')?.value;
+  const isStaticExport = process.env.NEXT_STATIC_EXPORT === 'true';
+  const cookieStore = isStaticExport ? null : await cookies();
+  const activeThemeValue = cookieStore?.get('active_theme')?.value;
   const isValidTheme = THEMES.some((t) => t.value === activeThemeValue);
   const themeToApply = isValidTheme ? activeThemeValue! : DEFAULT_THEME;
 

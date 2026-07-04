@@ -1,10 +1,15 @@
 import type { NextConfig } from 'next';
 import { withSentryConfig } from '@sentry/nextjs';
 
+const isStaticExport = process.env.NEXT_STATIC_EXPORT === 'true';
+const isStandalone = process.env.BUILD_STANDALONE === 'true';
+const isSentryDisabled = isStaticExport || process.env.NEXT_PUBLIC_SENTRY_DISABLED === 'true';
+
 // Define the base Next.js configuration
 const baseConfig: NextConfig = {
-  output: process.env.BUILD_STANDALONE === 'true' ? 'standalone' : undefined,
+  output: isStaticExport ? 'export' : isStandalone ? 'standalone' : undefined,
   images: {
+    unoptimized: isStaticExport,
     remotePatterns: [
       {
         protocol: 'https',
@@ -22,7 +27,7 @@ const baseConfig: NextConfig = {
 let configWithPlugins = baseConfig;
 
 // Conditionally enable Sentry configuration
-if (!process.env.NEXT_PUBLIC_SENTRY_DISABLED) {
+if (!isSentryDisabled) {
   configWithPlugins = withSentryConfig(configWithPlugins, {
     org: process.env.NEXT_PUBLIC_SENTRY_ORG,
     project: process.env.NEXT_PUBLIC_SENTRY_PROJECT,

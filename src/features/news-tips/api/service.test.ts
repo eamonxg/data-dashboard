@@ -11,25 +11,25 @@ import { getAllNewsTipRecords, getDashboardData, getRecords } from './service';
 import type { NewsTipRecord } from './types';
 
 const GUANGZHOU_DISTRICT_NAMES = [
-  '越秀',
-  '天河',
-  '荔湾',
-  '海珠',
-  '白云',
-  '黄埔',
-  '番禺',
-  '花都',
-  '南沙',
-  '从化',
-  '增城'
-];
+  [36234, 31168],
+  [22825, 27827],
+  [33620, 28286],
+  [28023, 29664],
+  [30333, 20113],
+  [40644, 22484],
+  [30058, 31162],
+  [33457, 37117],
+  [21335, 27801],
+  [20174, 21270],
+  [22686, 22478]
+].map((chars) => String.fromCodePoint(...chars));
 
 function uniqueDays(records: NewsTipRecord[]) {
   return new Set(records.map((record) => record.createdAt.slice(0, 10)));
 }
 
 function sortedUniqueDays(records: NewsTipRecord[]) {
-  return Array.from(uniqueDays(records)).sort();
+  return Array.from(uniqueDays(records)).toSorted();
 }
 
 function generatedDateRange(records: NewsTipRecord[]) {

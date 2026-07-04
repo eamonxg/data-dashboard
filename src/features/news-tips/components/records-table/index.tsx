@@ -40,7 +40,8 @@ import type {
   NewsTipRecordWithPriority,
   NewsTipSourcePlatform,
   NewsTipStatus,
-  PriorityLevel
+  PriorityLevel,
+  ShenzhenDistrict
 } from '../../api/types';
 import type {
   NewsTipFilterKind,
@@ -243,7 +244,7 @@ export function RecordsTable({
             selected={filters.sourcePlatform}
             onToggle={onToggleFilter}
           />
-          <FilterMenu<string>
+          <FilterMenu<ShenzhenDistrict>
             title='区域'
             kind='district'
             options={NEWS_TIP_DISTRICTS}
