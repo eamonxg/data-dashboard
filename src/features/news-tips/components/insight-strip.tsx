@@ -26,7 +26,10 @@ const toneIcon: Record<InsightItem['tone'], keyof typeof Icons> = {
 
 export function InsightStrip({ insights, activeInsightId, onApply }: InsightStripProps) {
   return (
-    <section className='grid gap-3 md:grid-cols-3' aria-label='运营态势摘要'>
+    <section
+      className='flex snap-x snap-mandatory gap-3 overflow-x-auto pb-1 md:grid md:grid-cols-3 md:overflow-visible md:pb-0'
+      aria-label='运营态势摘要'
+    >
       {insights.map((insight, index) => {
         const Icon = Icons[toneIcon[insight.tone]];
         const isActive = activeInsightId === insight.id;
@@ -36,8 +39,8 @@ export function InsightStrip({ insights, activeInsightId, onApply }: InsightStri
             key={insight.id}
             type='button'
             className={cn(
-              'group animate-in fade-in slide-in-from-bottom-2 flex min-h-32 text-left fill-mode-backwards duration-500',
-              'rounded-lg border p-4 transition-all hover:-translate-y-0.5 hover:shadow-md',
+              'group animate-in fade-in slide-in-from-bottom-2 flex min-h-32 shrink-0 snap-start text-left fill-mode-backwards duration-500',
+              'w-[85%] rounded-lg border p-4 transition-all hover:-translate-y-0.5 hover:shadow-md md:w-auto',
               toneStyles[insight.tone],
               isActive && 'ring-primary/40 ring-2'
             )}

@@ -82,7 +82,9 @@ export function CockpitToolbar() {
         <PopoverTrigger asChild>
           <Button variant='outline' size='sm' aria-label='选择自定义日期范围'>
             <Icons.calendar data-icon='inline-start' />
-            {formatDateLabel(params.dateFrom, params.dateTo)}
+            <span className='hidden sm:inline'>
+              {formatDateLabel(params.dateFrom, params.dateTo)}
+            </span>
           </Button>
         </PopoverTrigger>
         <PopoverContent align='end' className='w-auto p-0'>

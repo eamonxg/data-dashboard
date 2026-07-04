@@ -175,7 +175,7 @@ export function KpiCards({ filters }: { filters?: NewsTipFilters }) {
   const { kpi } = data;
 
   return (
-    <div className='grid gap-4 md:grid-cols-2 xl:grid-cols-4'>
+    <div className='grid grid-cols-2 gap-4 xl:grid-cols-4'>
       <KpiCard
         title='今日新增线索'
         value={`${kpi.todayCount}`}
