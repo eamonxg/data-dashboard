@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Icons } from '@/components/icons';
-import { ThemeModeToggle } from '@/components/themes/theme-mode-toggle';
 import { newsTipKeys } from '@/features/news-tips/api/queries';
 import { TIME_RANGE_OPTIONS } from '@/features/news-tips/constants/options';
 import { useNewsTipParams } from '@/features/news-tips/hooks/use-news-tip-params';
@@ -105,7 +104,6 @@ export function CockpitToolbar() {
       >
         <Icons.refresh />
       </Button>
-      <ThemeModeToggle />
     </div>
   );
 }

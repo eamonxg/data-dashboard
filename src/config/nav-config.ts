@@ -60,13 +60,6 @@ export const navGroups: NavGroup[] = [
             url: '/dashboard/news-tips/flow'
           }
         ]
-      },
-      {
-        title: '设计规范',
-        url: '/dashboard/design',
-        icon: 'palette',
-        isActive: false,
-        items: []
       }
     ]
   }
