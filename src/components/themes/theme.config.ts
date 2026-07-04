@@ -6,43 +6,43 @@ export const DEFAULT_THEME = 'astro-vista';
 
 export const THEMES = [
   {
-    name: 'Claude',
+    name: 'Amber',
     value: 'claude'
   },
   {
-    name: 'Neobrutualism',
+    name: 'Crimson',
     value: 'neobrutualism'
   },
   {
-    name: 'Supabase',
+    name: 'Emerald',
     value: 'supabase'
   },
   {
-    name: 'Vercel',
+    name: 'Onyx',
     value: 'vercel'
   },
   {
-    name: 'Mono',
+    name: 'Slate',
     value: 'mono'
   },
   {
-    name: 'Notebook',
+    name: 'Graphite',
     value: 'notebook'
   },
   {
-    name: 'Light Green',
+    name: 'Lime',
     value: 'light-green'
   },
   {
-    name: 'Zen',
+    name: 'Stone',
     value: 'zen'
   },
   {
-    name: 'Astro Vista',
+    name: 'Sunset',
     value: 'astro-vista'
   },
   {
-    name: 'WhatsApp',
+    name: 'Teal',
     value: 'whatsapp'
   }
 ];

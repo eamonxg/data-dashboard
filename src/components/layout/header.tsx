@@ -3,6 +3,7 @@ import { SidebarTrigger } from '../ui/sidebar';
 import { Separator } from '../ui/separator';
 import { Breadcrumbs } from '../breadcrumbs';
 import { ThemeModeToggle } from '../themes/theme-mode-toggle';
+import { ThemeSelector } from '../themes/theme-selector';
 
 export default function Header() {
   return (
@@ -14,6 +15,7 @@ export default function Header() {
       </div>
 
       <div className='ml-auto flex items-center gap-2 px-4'>
+        <ThemeSelector />
         <ThemeModeToggle />
       </div>
     </header>
