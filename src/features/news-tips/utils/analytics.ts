@@ -252,3 +252,24 @@ export function aggregateTrend(records: NewsTipRecord[], granularity: Granularit
       adoptionRate: adoptionRate(bucket.records)
     }));
 }
+
+export function selectTodoItems(
+  records: NewsTipRecordWithPriority[],
+  limit: number
+): NewsTipRecordWithPriority[] {
+  const high = records.filter((record) => record.priorityLevel === 'high');
+  const medium = records.filter((record) => record.priorityLevel === 'medium');
+  return [...high, ...medium].slice(0, limit);
+}
+
+export interface StatusGroup {
+  status: NewsTipStatus;
+  items: NewsTipRecordWithPriority[];
+}
+
+export function groupRecordsByStatus(records: NewsTipRecordWithPriority[]): StatusGroup[] {
+  return NEWS_TIP_STATUSES.map((status) => ({
+    status,
+    items: records.filter((record) => record.status === status)
+  }));
+}
