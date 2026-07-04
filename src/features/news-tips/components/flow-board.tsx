@@ -19,7 +19,6 @@ import {
   ReassignDialog,
   RejectDialog
 } from '@/features/news-tips/components/flow-dialogs';
-import { WorkbenchNav } from '@/features/news-tips/components/section-nav';
 import { canTransition, requiresReason } from '@/features/news-tips/constants/transitions';
 import { useFlowActions } from '@/features/news-tips/hooks/use-flow-actions';
 import { useNewsTipParams } from '@/features/news-tips/hooks/use-news-tip-params';
@@ -104,7 +103,6 @@ export function FlowBoard() {
 
   return (
     <div className='grid gap-4'>
-      <WorkbenchNav />
       <DndContext
         onDragStart={handleDragStart}
         onDragCancel={() => {
