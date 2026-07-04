@@ -2,6 +2,7 @@ import KBar from '@/components/kbar';
 import AppSidebar from '@/components/layout/app-sidebar';
 import Header from '@/components/layout/header';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+import { getSidebarDefaultOpen } from '@/lib/sidebar-state';
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 
@@ -17,8 +18,10 @@ export const metadata: Metadata = {
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   // Persisting the sidebar state in the cookie.
   const isStaticExport = process.env.NEXT_STATIC_EXPORT === 'true';
-  const cookieStore = isStaticExport ? null : await cookies();
-  const defaultOpen = isStaticExport ? true : cookieStore?.get('sidebar_state')?.value === 'true';
+  const sidebarCookieValue = isStaticExport
+    ? undefined
+    : (await cookies()).get('sidebar_state')?.value;
+  const defaultOpen = getSidebarDefaultOpen(sidebarCookieValue);
   return (
     <KBar>
       <SidebarProvider defaultOpen={defaultOpen}>
