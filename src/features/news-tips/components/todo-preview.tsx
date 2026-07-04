@@ -37,11 +37,13 @@ export function TodoPreview({ records }: { records: NewsTipRecordWithPriority[] 
             <Link
               key={record.id}
               href={`/dashboard/news-tips/records?priority=${record.priorityLevel}`}
-              className='hover:bg-muted/70 grid gap-1 rounded-lg border p-3 transition-colors'
+              className='hover:bg-muted/70 grid min-w-0 gap-1 rounded-lg border p-3 transition-colors'
             >
-              <div className='flex items-center justify-between gap-2'>
-                <span className='truncate text-sm font-medium'>{record.title}</span>
-                <Badge variant={PRIORITY_BADGE[record.priorityLevel]}>{record.priorityLabel}</Badge>
+              <div className='flex min-w-0 items-center justify-between gap-2'>
+                <span className='min-w-0 truncate text-sm font-medium'>{record.title}</span>
+                <Badge className='shrink-0' variant={PRIORITY_BADGE[record.priorityLevel]}>
+                  {record.priorityLabel}
+                </Badge>
               </div>
               <span className='text-muted-foreground text-xs'>
                 {record.district}

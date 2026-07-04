@@ -27,7 +27,7 @@ const toneIcon: Record<InsightItem['tone'], keyof typeof Icons> = {
 export function InsightStrip({ insights, activeInsightId, onApply }: InsightStripProps) {
   return (
     <section
-      className='flex snap-x snap-mandatory gap-3 overflow-x-auto pb-1 md:grid md:grid-cols-3 md:overflow-visible md:pb-0'
+      className='flex min-w-0 snap-x snap-mandatory gap-3 overflow-x-auto pb-1 md:grid md:grid-cols-3 md:overflow-visible md:pb-0'
       aria-label='运营态势摘要'
     >
       {insights.map((insight, index) => {

@@ -40,8 +40,8 @@ export function RecordsWorkbench() {
   };
 
   return (
-    <div className='grid gap-4'>
-      <div className='flex flex-wrap items-center justify-between gap-2'>
+    <div className='grid grid-cols-[minmax(0,1fr)] gap-4'>
+      <div className='flex min-w-0 flex-wrap items-center justify-between gap-2'>
         <WorkbenchNav />
         <Button variant='outline' size='sm' onClick={showTodayTodo}>
           <Icons.clock />
