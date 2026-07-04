@@ -616,3 +616,101 @@ src/features/baoliao/
 - 概览图、趋势图、明细表、CSV 导出仍需继续实现。
 - 新增 PRD 范围中，运营态势摘要、优先级预警、区域热区矩阵、图表联动筛选尚未实现。
 - `pnpm-workspace.yaml` 当前为未跟踪文件，本需求文档不处理该文件。
+
+## 16. CEO Review 记录
+
+### 16.1 赛题对齐审查
+
+| 赛题要求 | 当前方案 | CEO Review 判断 |
+| --- | --- | --- |
+| KPI -> 概览 -> 趋势 -> 明细 | 已覆盖 | 结构正确，但应加入态势摘要，让页面先给判断再给数据 |
+| 3+ 图表 | 已规划 4 类 | 建议做到 5 类：sparkline、环形、条形、双轴趋势、区域热区矩阵 |
+| 3+ 可操作功能 | 已规划 8 项 | 图表联动和摘要点击会让交互更像成熟数据产品 |
+| 30+ 模拟数据 | 已规划 180 天数据 | 数据真实感强，需补优先级和区域聚合增强业务味道 |
+| 专业产品感 | 已规划深色大屏风 | 需要口径说明、最后更新时间、筛选 chips、空状态、导出摘要来建立可信度 |
+
+### 16.2 实现路径对比
+
+| 路径 | 说明 | 完整度 | 风险 | 结论 |
+| --- | --- | --- | --- | --- |
+| A. 原 PRD 收口 | 只完成 KPI、图表、表格、导出 | 7/10 | 低 | 能过基础分，但创新性不足 |
+| B. 选择性扩展 | 在原 PRD 上加入态势摘要、优先级、区域热区、图表联动 | 9/10 | 中低 | 推荐，投入小，评分回报高 |
+| C. 平台化大屏 | 加真实地图、后端接口、审批流、AI 总结 | 10/10 | 高 | 不适合 8 小时单人赛，容易拖垮主线 |
+
+最终选择 B。理由：它复用现有数据层和组件体系，不增加后端依赖，同时明显提升信息架构、交互操作和专业设计评分。
+
+### 16.3 Scope Decisions
+
+| # | 提案 | 优先级 | 决策 | 原因 |
+| --- | --- | --- | --- | --- |
+| 1 | 运营态势摘要 | P0 | 接受 | 低成本把数据转成判断，是最像成熟产品的增量 |
+| 2 | 线索优先级预警 | P0 | 接受 | 表格从“查看记录”变成“指导处理”，业务价值明确 |
+| 3 | 图表联动筛选 | P1 | 接受 | 直接命中附加加分项，交互效果明显 |
+| 4 | 区域热区矩阵 | P1 | 接受 | 替代真实地图，风险低，满足区域分布表达 |
+| 5 | 真实 GIS 地图 | P2 | 延后 | 坐标、地图包、移动端适配成本高，本期不划算 |
+| 6 | AI 接口自动总结 | P2 | 延后 | 需要密钥、错误处理和提示词评估，本期用规则摘要更稳 |
+
+### 16.4 NOT in Scope
+
+- 真实后端接口和数据库：赛题允许前端模拟数据，当前重点是可运行 H5。
+- 真实 GIS 地图：用区域热区矩阵表达报料密度，避免地图依赖和坐标数据风险。
+- AI 大模型总结：本期用规则生成摘要，避免空响应、格式错误、密钥配置等不可控问题。
+- 多用户协作和审批后台：超出单页驾驶舱范围，会稀释评分主线。
+- Clerk 权限体系：本赛题要求可直接打开页面，登录墙会降低评委体验。
+
+### 16.5 Error & Rescue Registry
+
+| Codepath | 可能失败 | 处理方式 | 用户看到 |
+| --- | --- | --- | --- |
+| `getDashboardData(range)` | 时间范围无数据 | 返回空数组聚合，图表展示空状态 | “当前范围暂无报料数据” |
+| `getTrend(granularity, range)` | 粒度和时间范围组合导致桶为空 | 返回空趋势数组 | 趋势卡片空状态 |
+| `getRecords(filters)` | 筛选条件互斥导致 0 条 | 返回空数组 | 空状态 + 清空筛选入口 |
+| `exportCsv(rows)` | 当前筛选结果为 0 条 | 禁用导出或 toast 提示 | “暂无可导出数据” |
+| `derivePriority(record)` | `responseMinutes` 为 `null` | 按待审核时长和状态判断，不做数字比较 | 优先级仍可解释 |
+| `generateInsightItems(data)` | 没有异常或聚合值全 0 | 返回平稳摘要 | “当前态势平稳，暂无明显异常” |
+
+### 16.6 Failure Modes Registry
+
+| Codepath | Failure Mode | Rescued? | Test? | User Sees? | Logged? |
+| --- | --- | --- | --- | --- | --- |
+| 图表联动筛选 | 点击后用户不知道当前筛选条件 | Y | 手动验收 | chips 和选中态 | N/A |
+| 优先级预警 | 高优先级判断像黑盒 | Y | 手动验收 | 行展开命中原因 | N/A |
+| 区域热区矩阵 | 手机端卡片拥挤 | Y | 375px 验收 | 单列或双列自适应 | N/A |
+| CSV 导出 | 中文乱码 | Y | 手动打开 CSV | UTF-8 BOM 文件 | N/A |
+| 空筛选结果 | 页面看起来像坏了 | Y | 手动验收 | 空状态和清空入口 | N/A |
+
+### 16.7 Implementation Tasks
+
+- [ ] **T1 (P0, human: ~45min / CC: ~8min)** - 数据层 - 增加优先级派生和态势摘要聚合
+  - Surfaced by: CEO Review - 原 PRD 缺少能直接指导处理的判断层
+  - Files: `src/features/baoliao/api/types.ts`, `src/features/baoliao/api/service.ts`
+  - Verify: 页面能展示 2-3 条摘要，高优先级线索可解释
+- [ ] **T2 (P0, human: ~45min / CC: ~8min)** - UI - 实现 `insight-strip.tsx` 和 active filters
+  - Surfaced by: CEO Review - 需要让用户从摘要直接下钻
+  - Files: `src/features/baoliao/components/insight-strip.tsx`, `src/features/baoliao/components/active-filters.tsx`
+  - Verify: 点击摘要后筛选或排序变化，chip 可清除
+- [ ] **T3 (P1, human: ~60min / CC: ~12min)** - 图表 - 实现环形图、条形图、趋势图和点击联动
+  - Surfaced by: 赛题附加加分项 - 4+ 图表且均含交互
+  - Files: `channel-pie.tsx`, `category-bar.tsx`, `trend-chart.tsx`
+  - Verify: hover tooltip 正常，至少渠道/类型点击能联动表格
+- [ ] **T4 (P1, human: ~35min / CC: ~8min)** - 区域分析 - 实现区域热区矩阵
+  - Surfaced by: 挑战要求 - 地图热力或来源图可作为概览表达
+  - Files: `district-heat-grid.tsx`, `service.ts`
+  - Verify: 区域按数量排序，点击区域可筛选明细
+- [ ] **T5 (P0, human: ~60min / CC: ~12min)** - 表格/导出 - 完成明细表、展开、空状态和 CSV 摘要
+  - Surfaced by: 交互评分 - 筛选、排序、分页、展开、导出必须闭环
+  - Files: `records-table/`, `utils/export-csv.ts`
+  - Verify: 空结果可恢复，导出文件中文不乱码
+
+## GSTACK REVIEW REPORT
+
+| Review | Trigger | Why | Runs | Status | Findings |
+| --- | --- | --- | --- | --- | --- |
+| CEO Review | `/plan-ceo-review` | Scope & strategy | 1 | CLEAR | 6 proposals, 4 accepted, 2 deferred |
+| Codex Review | `/codex review` | Independent 2nd opinion | 0 | NOT RUN | Not requested for this PRD edit |
+| Eng Review | `/plan-eng-review` | Architecture & tests (required) | 0 | NOT RUN | Required before implementation ship |
+| Design Review | `/plan-design-review` | UI/UX gaps | 0 | NOT RUN | Recommended after UI is implemented |
+| DX Review | `/plan-devex-review` | Developer experience gaps | 0 | NOT RUN | Not needed for current PRD edit |
+
+- **UNRESOLVED:** 0
+- **VERDICT:** CEO scope review cleared for implementation planning; eng review still required before shipping code.
